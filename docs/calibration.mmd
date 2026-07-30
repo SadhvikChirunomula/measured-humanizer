@@ -1,0 +1,11 @@
+flowchart TD
+  H["36 human documents"] --> M["metrics(): 18 fields each"]
+  A["45 AI documents"] --> M
+  M --> AUC["Rank by AUC"]
+  AUC -->|"below 0.65"| DROP["Rejected: phrase lists"]
+  AUC -->|"0.65 and above"| KEEP["7 structural dimensions"]
+  KEEP --> RANGE["Two-sided range from the human band"]
+  KEEP --> W["Weight = that dimension's AUC"]
+  RANGE --> SWEEP["Sweep the cutoff for best separation"]
+  W --> SWEEP
+  SWEEP --> T["thresholds.json"]

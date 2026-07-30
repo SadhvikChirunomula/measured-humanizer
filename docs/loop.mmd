@@ -1,0 +1,9 @@
+flowchart TD
+  D["draft.md"] --> S["Run style_gate.js"]
+  S --> C{"composite >= 0.84 and no absolute veto?"}
+  C -->|"yes"| OK["pass=true, ship it"]
+  C -->|"no"| E["Edit the single worst dimension, minimum diff"]
+  E --> I{"Code blocks and links intact?"}
+  I -->|"no"| RB["Discard the edit"]
+  I -->|"yes, re-measure, max 4 passes"| S
+  RB --> S

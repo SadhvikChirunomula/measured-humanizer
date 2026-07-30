@@ -1,0 +1,51 @@
+{
+ "generated": "2026-07-29",
+ "corpus": {
+  "human": 36,
+  "ai": 45
+ },
+ "minAuc": 0.65,
+ "cutoff": 0.84,
+ "expected": {
+  "humanPass": 0.75,
+  "aiPass": 0.11,
+  "separation": 0.64
+ },
+ "metrics": {
+  "sent_stdev": {
+   "lo": 6.35,
+   "hi": 77.14,
+   "strength": 0.72
+  },
+  "para_stdev": {
+   "lo": 14.37,
+   "hi": 85.02,
+   "strength": 0.9
+  },
+  "contraction_rate": {
+   "lo": 5.12,
+   "hi": 24.06,
+   "strength": 0.66
+  },
+  "first_person_rate": {
+   "lo": 0.73,
+   "hi": 26.03,
+   "strength": 0.89
+  },
+  "emdash_rate": {
+   "lo": 0,
+   "hi": 4.67,
+   "strength": 0.74
+  },
+  "concrete_rate": {
+   "lo": 11.09,
+   "hi": 98.79,
+   "strength": 0.69
+  },
+  "long_word_rate": {
+   "lo": 65.07,
+   "hi": 200,
+   "strength": 0.74
+  }
+ }
+}

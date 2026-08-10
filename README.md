@@ -1,5 +1,8 @@
 # measured-humanizer
 
+[![CI](https://github.com/SadhvikChirunomula/measured-humanizer/actions/workflows/ci.yml/badge.svg)](https://github.com/SadhvikChirunomula/measured-humanizer/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Star History Chart](https://api.star-history.com/svg?repos=SadhvikChirunomula/measured-humanizer&type=Date)](https://star-history.com/#SadhvikChirunomula/measured-humanizer&Date)
 A Claude Code skill that makes writing read as human-written by **measuring it**,
 not by pattern-matching a list of words someone decided sound like a robot.
 

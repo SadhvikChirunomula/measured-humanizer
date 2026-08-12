@@ -6,6 +6,8 @@
 
 > An enterprise-grade AI writing calibrator and style enforcer that measures human-likeness statistically, eliminating subjective "AI tell" pattern-matching.
 
+![Measured Humanizer Preview](docs/measured_humanizer_preview.jpg)
+
 Measured Humanizer is an agent-agnostic skill that makes writing read as human-written by **measuring it**, not by pattern-matching a list of words someone decided sound like a robot. 
 
 It ships a dependency-free Node scorer calibrated against **36 human-written and 45 AI-written technical documents**. Point it at a draft and it returns the single worst dimension plus an instruction for fixing it. Fix that one thing. Re-measure. Repeat until it passes.

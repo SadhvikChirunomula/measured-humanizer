@@ -144,6 +144,10 @@ An earlier version keyed off a whitelist of what/why/how/when/which and vetoed
 everything else, which flagged the exact headings the spec required. Zone by
 heading level, never by opening word.
 
+Emphasis markers are stripped before the `?` test, so `## **Is X faster?**` is
+still a question — a bold heading ends in `*`, and matching on the raw text let
+every bold question walk past the veto.
+
 ## Recalibrating for a different voice
 
 `gate/thresholds.json` carries the fitted ranges, per-dimension `strength` (the

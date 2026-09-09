@@ -81,6 +81,13 @@ echo "heading zoning"
 printf '# T\n\n## Is this a question?\n\nwe ran it and it worked, and the thing to watch here is the retry budget, which we set to three attempts.\n' > "$tmp/q.md"
 check "a question H2 is vetoed in an article" "worst=question_h2_headings" \
   "$(node "$GATE" "$tmp/q.md" --brief)"
+# A heading carrying markdown emphasis ends in the emphasis marker, not in its
+# own punctuation. Testing the raw text classified every bold question heading as
+# a statement and silently disarmed the veto above.
+printf '# T\n\n## **Is this a question?**\n\nwe ran it and it worked, and the thing to watch here is the retry budget, which we set to three attempts.\n' > "$tmp/qb.md"
+check "a bold question H2 is vetoed too" "worst=question_h2_headings" \
+  "$(node "$GATE" "$tmp/qb.md" --brief)"
+
 out="$(node "$GATE" "$tmp/q.md" --brief --no-zoning)"
 case "$out" in
   *question_h2_headings*) bad "--no-zoning drops the H2 rule" "no question_h2_headings" "$out";;

@@ -151,12 +151,24 @@ function metrics(md) {
 // DuckDB file at once?" and "Is the multi-writer problem actually solved now?"
 // as violations - headings the GEO spec explicitly requires. The two gates
 // contradicted each other and every well-formed article was vetoed.
+// A heading carrying markdown emphasis ends in the emphasis marker, not in its
+// own punctuation: "### **Can I use these together?**" ends with '*'. Testing
+// the raw text classified every bold question heading as a statement, which
+// silently disarmed the question_h2 veto below and, in geo_score, made
+// question_h3_ratio unsatisfiable - the fix loop there answered by adding more
+// Q&A on every pass and grew one article's FAQ to 2,249 words. Revised pages
+// hit this hardest: the live pages being revised are bold-headed, and the
+// drafter is told to keep existing heading wording.
+function isQuestion(text) {
+  return text.replace(/[*_`\s]+$/, "").endsWith("?");
+}
+
 function headingZones(md) {
   const heads = [...md.matchAll(/^(#{2,3})\s+(.+)$/gm)]
     .map((m) => ({ level: m[1].length, text: m[2].trim() }));
-  const questionH2 = heads.filter((h) => h.level === 2 && h.text.endsWith("?")).map((h) => h.text);
-  const questionH3 = heads.filter((h) => h.level === 3 && h.text.endsWith("?")).map((h) => h.text);
-  const statementH3 = heads.filter((h) => h.level === 3 && !h.text.endsWith("?")).map((h) => h.text);
+  const questionH2 = heads.filter((h) => h.level === 2 && isQuestion(h.text)).map((h) => h.text);
+  const questionH3 = heads.filter((h) => h.level === 3 && isQuestion(h.text)).map((h) => h.text);
+  const statementH3 = heads.filter((h) => h.level === 3 && !isQuestion(h.text)).map((h) => h.text);
   return { questionH2, questionH3, statementH3 };
 }
 

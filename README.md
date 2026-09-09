@@ -16,6 +16,7 @@ That loop terminates. "Make this sound more human" does not.
 
 ## Table of Contents
 
+- [Detector Results](#detector-results)
 - [Features](#features)
 - [Supported Ecosystems](#supported-ecosystems)
 - [Why Structural Measurement?](#why-structural-measurement)
@@ -26,6 +27,31 @@ That loop terminates. "Make this sound more human" does not.
 - [Development & Testing](#development--testing)
 - [Limitations](#limitations)
 - [License](#license)
+
+## Detector Results
+
+Passing the gate is the goal; these scores are a side effect of it. An article
+that came out of the correction loop with a passing composite, pasted unmodified
+into two public AI detectors:
+
+<table>
+<tr>
+<td width="50%"><img src="assets/zerogpt.png" alt="ZeroGPT: 2.4% AI GPT, file content is human written"></td>
+<td width="50%"><img src="assets/quillbot.png" alt="QuillBot v7.1.0: 0% AI-generated, 100% human-written"></td>
+</tr>
+<tr>
+<td><b>ZeroGPT</b> — 2.4% AI, classified human-written</td>
+<td><b>QuillBot</b> (v7.1.0) — 0% AI-generated, 100% human-written</td>
+</tr>
+</table>
+
+Read these for what they are. They are two detectors, on one document, in
+September 2026, and detectors are retrained without notice. The gate does not
+target them and was never fitted against their output — it is calibrated against
+36 human and 45 AI documents, and these vendors are not in that loop. Treat a
+result like this as corroboration that the structural dimensions in
+[Why Structural Measurement?](#why-structural-measurement) are picking up
+something real, not as a bypass guarantee. See [Limitations](#limitations).
 
 ## Features
 
@@ -176,7 +202,7 @@ Two fixtures carry the load: a document written to look generated must fail and 
 
 ## Limitations
 
-- **Not an AI-detector bypass.** It's a filter, not an oracle.
+- **Not an AI-detector bypass.** It's a filter, not an oracle. The scores in [Detector Results](#detector-results) are one document at one point in time, not a promise about yours.
 - **Not a substitute for having something to say.** A document contorted to hit the numbers is not good writing, it's a document that games a gate.
 - **Not domain-general as shipped.** It is calibrated for technical prose. See recalibration above.
 

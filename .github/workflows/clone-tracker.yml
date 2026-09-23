@@ -1,0 +1,28 @@
+name: GitHub Repository Traffic Stats
+
+on:
+  schedule:
+    # Runs automatically every day at midnight UTC
+    - cron: '0 0 * * *'
+  # Allows you to trigger the workflow manually from the Actions tab
+  workflow_dispatch: true
+
+jobs:
+  run-stats:
+    runs-on: ubuntu-latest
+    
+    # Required permissions to write the generated reports to your repository
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fetch and aggregate repository stats
+        uses: jgehrcke/github-repo-stats@v1.4.2
+        with:
+          # A Personal Access Token (PAT) with 'repo' scope is required 
+          # because the default GITHUB_TOKEN cannot access traffic API data.
+          repository: ${{ github.repository }}
+          ghtoken: ${{ secrets.STATS_TOKEN }}

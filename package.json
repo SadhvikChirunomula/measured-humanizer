@@ -1,0 +1,45 @@
+{
+  "name": "measured-humanizer",
+  "version": "1.0.0",
+  "description": "An empirical, deterministic style gate and calibrator for AI writing that measures structural variance instead of pattern-matching word lists.",
+  "main": "skills/measured-humanizer/gate/style_gate.js",
+  "bin": {
+    "measured-humanizer": "./bin/measured-humanizer.js",
+    "measured-humanizer-mcp": "./bin/mcp-server.js"
+  },
+  "files": [
+    "bin",
+    "skills/measured-humanizer/gate",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "bash ./test/run.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SadhvikChirunomula/measured-humanizer.git"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "writing",
+    "claude-code",
+    "claude-plugin",
+    "humanizer",
+    "style-gate",
+    "linter",
+    "pre-commit",
+    "code-review",
+    "developer-tools"
+  ],
+  "author": "Sadhvik Chirunomula <sadhu1998@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SadhvikChirunomula/measured-humanizer/issues"
+  },
+  "homepage": "https://github.com/SadhvikChirunomula/measured-humanizer#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

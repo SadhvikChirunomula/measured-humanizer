@@ -2,6 +2,10 @@
 
 [![CI](https://github.com/SadhvikChirunomula/measured-humanizer/actions/workflows/ci.yml/badge.svg)](https://github.com/SadhvikChirunomula/measured-humanizer/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://img.shields.io/npm/v/measured-humanizer.svg)](https://www.npmjs.com/package/measured-humanizer)
+[![GitHub Action](https://img.shields.io/badge/GitHub%20Action-Ready-blue.svg)](https://github.com/SadhvikChirunomula/measured-humanizer)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![MCP Server](https://img.shields.io/badge/MCP-Server-purple.svg)](https://modelcontextprotocol.io)
 [![Star History Chart](https://api.star-history.com/svg?repos=SadhvikChirunomula/measured-humanizer&type=Date)](https://star-history.com/#SadhvikChirunomula/measured-humanizer&Date)
 
 > An enterprise-grade AI writing calibrator and style enforcer that measures human-likeness statistically, eliminating subjective "AI tell" pattern-matching.
@@ -21,8 +25,8 @@ That loop terminates. "Make this sound more human" does not.
 - [Supported Ecosystems](#supported-ecosystems)
 - [Why Structural Measurement?](#why-structural-measurement)
 - [Architecture & Workflow](#architecture--workflow)
-- [Installation](#installation)
-- [Usage & Integrations](#usage--integrations)
+- [Installation & Integrations](#installation--integrations)
+- [Usage & Flags](#usage--flags)
 - [Recalibration](#recalibration)
 - [Development & Testing](#development--testing)
 - [Contributing](#contributing)
@@ -129,7 +133,60 @@ Absolute rules (like `parallelism` and `discourse_markers`) sit outside that ari
 
 Only the **single worst** dimension is fixed per pass. Fixing several at once trades one failing check against another. After each pass, integrity is checked against the pre-edit copy.
 
-## Installation
+## Installation & Integrations
+
+### 1. Instant Run via NPX / NPM (No clone needed)
+
+```bash
+# Run on any markdown document
+npx measured-humanizer draft.md --brief
+
+# Or install globally
+npm install -g measured-humanizer
+measured-humanizer draft.md --brief
+```
+
+### 2. GitHub Actions CI/CD Pipeline
+
+Add automated human-likeness gating and link/code integrity verification directly into your repository workflows:
+
+```yaml
+- name: Verify Documentation Style
+  uses: SadhvikChirunomula/measured-humanizer@main
+  with:
+    path: 'README.md'
+    brief: true
+    fail-on-veto: true
+```
+
+### 3. Pre-commit Hook
+
+Add to your `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/SadhvikChirunomula/measured-humanizer
+    rev: main
+    hooks:
+      - id: measured-humanizer
+```
+
+### 4. Model Context Protocol (MCP) Server
+
+Connect Measured Humanizer directly into **Claude Desktop**, **Cursor**, **Antigravity**, or any MCP-compatible agent environment:
+
+```json
+{
+  "mcpServers": {
+    "measured-humanizer": {
+      "command": "node",
+      "args": ["/path/to/measured-humanizer/bin/mcp-server.js"]
+    }
+  }
+}
+```
+
+### 5. Claude Code Plugin / Skill
 
 **As a Claude Plugin** (recommended — updates with `/plugin`):
 
@@ -138,23 +195,13 @@ Only the **single worst** dimension is fixed per pass. Fixing several at once tr
 /plugin install measured-humanizer@measured-humanizer
 ```
 
-**As a plain skill for Claude Code / CLI usage**:
+**As a standalone skill for Claude Code / CLI usage**:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/SadhvikChirunomula/measured-humanizer/main/install.sh | bash
 ```
 
-**From source (for CI/CD or custom agent integration)**:
-
-```bash
-git clone https://github.com/SadhvikChirunomula/measured-humanizer.git
-cd measured-humanizer
-npm install # if dependencies are added in the future
-```
-
-*Note: Node 14+ is the only requirement to run the gate.*
-
-## Usage & Integrations
+## Usage & Flags
 
 Ask your agent (Claude, Copilot, Codex, Antigravity) to humanize, de-slop, or audit a draft. Or run the scorer directly from the CLI:
 

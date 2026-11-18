@@ -1,0 +1,7 @@
+- id: measured-humanizer
+  name: measured-humanizer
+  description: Deterministic style gate enforcing structural human-likeness on Markdown documents
+  entry: node skills/measured-humanizer/gate/style_gate.js
+  language: node
+  files: \.(md|markdown)$
+  args: ['--brief', '--exit-code']

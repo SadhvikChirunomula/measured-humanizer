@@ -98,6 +98,10 @@ echo
 echo "cli contract"
 node "$GATE" "$FIX/human_shaped.md" >/dev/null 2>&1
 check "exit 0 on a scored document" "0" "$?"
+node "$GATE" "$FIX/human_shaped.md" --exit-code >/dev/null 2>&1
+check "exit 0 with --exit-code on passing document" "0" "$?"
+node "$GATE" "$FIX/ai_shaped.md" --exit-code >/dev/null 2>&1
+check "exit 1 with --exit-code on failing document" "1" "$?"
 node "$GATE" "$FIX/human_shaped.md" 2>/dev/null | node -e '
 let s = ""; process.stdin.on("data", (d) => (s += d)).on("end", () => {
   const j = JSON.parse(s);
@@ -108,6 +112,9 @@ let s = ""; process.stdin.on("data", (d) => (s += d)).on("end", () => {
 check "full JSON carries every documented key" "shape=ok" "$(cat "$tmp/shape")"
 node "$GATE" >/dev/null 2>&1
 check "exit 2 with no argument" "2" "$?"
+BIN="$here/../bin/measured-humanizer.js"
+node "$BIN" "$FIX/human_shaped.md" --brief >/dev/null 2>&1
+check "bin executable wrapper passes on human fixture" "0" "$?"
 
 echo
 printf '%d passed, %d failed\n' "$pass" "$fail"

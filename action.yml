@@ -1,0 +1,40 @@
+name: 'Measured Humanizer Style Gate'
+description: 'Enforce empirical, structural human-likeness and integrity checks on markdown documentation in CI'
+author: 'Sadhvik Chirunomula'
+inputs:
+  path:
+    description: 'Path or glob of markdown file(s) to check'
+    required: true
+    default: 'README.md'
+  brief:
+    description: 'Output brief human-readable diagnostics instead of full JSON'
+    required: false
+    default: 'true'
+  no-zoning:
+    description: 'Disable H2/H3 heading zoning rules (e.g. for READMEs or design docs)'
+    required: false
+    default: 'false'
+  fail-on-veto:
+    description: 'Exit with non-zero exit code if the document fails or is vetoed'
+    required: false
+    default: 'true'
+  thresholds:
+    description: 'Path to custom thresholds.json'
+    required: false
+    default: ''
+runs:
+  using: 'composite'
+  steps:
+    - name: Run Measured Humanizer Gate
+      shell: bash
+      run: |
+        ARGS=()
+        if [ "${{ inputs.brief }}" = "true" ]; then ARGS+=("--brief"); fi
+        if [ "${{ inputs.no-zoning }}" = "true" ]; then ARGS+=("--no-zoning"); fi
+        if [ "${{ inputs.fail-on-veto }}" = "true" ]; then ARGS+=("--exit-code"); fi
+        if [ -n "${{ inputs.thresholds }}" ]; then ARGS+=("--thresholds" "${{ inputs.thresholds }}"); fi
+
+        node "${{ github.action_path }}/skills/measured-humanizer/gate/style_gate.js" "${{ inputs.path }}" "${ARGS[@]}"
+branding:
+  icon: 'check-circle'
+  color: 'blue'

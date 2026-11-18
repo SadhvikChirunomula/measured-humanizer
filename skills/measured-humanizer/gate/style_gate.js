@@ -295,11 +295,8 @@ function gate(md, thresholds, before, opts) {
   return result;
 }
 
-module.exports = { metrics, gate, integrity, headingZones, proseOnly, sentences };
-
-if (require.main === module) {
+function runCli(args = process.argv.slice(2)) {
   const path = require("path");
-  const args = process.argv.slice(2);
   const file = args.find((a) => !a.startsWith("--"));
   const tIdx = args.indexOf("--thresholds");
   const bIdx = args.indexOf("--before");
@@ -333,4 +330,13 @@ if (require.main === module) {
   } else {
     console.log(JSON.stringify(out, null, 1));
   }
+  if (args.includes("--exit-code") && !out.pass) {
+    process.exit(1);
+  }
+}
+
+module.exports = { metrics, gate, integrity, headingZones, proseOnly, sentences, runCli };
+
+if (require.main === module) {
+  runCli();
 }

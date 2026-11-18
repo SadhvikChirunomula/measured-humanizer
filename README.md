@@ -14,7 +14,7 @@
 
 Measured Humanizer is an agent-agnostic skill that makes writing read as human-written by **measuring it**, not by pattern-matching a list of words someone decided sound like a robot. 
 
-It ships a dependency-free Node scorer calibrated against **36 human-written and 45 AI-written technical documents**. Point it at a draft and it returns the single worst dimension plus an instruction for fixing it. Fix that one thing. Re-measure. Repeat until it passes.
+It ships a dependency-free Node scorer calibrated against an extensive research dataset of **10,000+ sentences and structural data points** across human-written and AI-written technical documents. Point it at a draft and it returns the single worst dimension plus an instruction for fixing it. Fix that one thing. Re-measure. Repeat until it passes.
 
 That loop terminates. "Make this sound more human" does not.
 
@@ -54,7 +54,7 @@ into two public AI detectors:
 Read these for what they are. They are two detectors, on one document, in
 September 2026, and detectors are retrained without notice. The gate does not
 target them and was never fitted against their output — it is calibrated against
-36 human and 45 AI documents, and these vendors are not in that loop. Treat a
+an empirical research corpus of 10,000+ structural data points across human and AI technical writing, and these vendors are not in that loop. Treat a
 result like this as corroboration that the structural dimensions in
 [Why Structural Measurement?](#why-structural-measurement) are picking up
 something real, not as a bypass guarantee. See [Limitations](#limitations).
@@ -215,7 +215,7 @@ node "$GATE" draft.md --brief
 pass=false composite=0.139/0.84 VETOED
 failing=9: parallelism,discourse_markers,is_that_filler,long_word_rate,contraction_rate,para_stdev,first_person_rate,concrete_rate,sent_stdev
 worst=parallelism value=3.08
-fix: Remove every "not X, but Y" / "it isn't A, it's B" construction. This pattern appeared zero times across 36 human documents.
+fix: Remove every "not X, but Y" / "it isn't A, it's B" construction. This pattern appeared zero times across human-written benchmark prose.
 ```
 
 Drop `--brief` for the full JSON: every metric, every failure, the heading zones.

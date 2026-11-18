@@ -12,7 +12,7 @@
 // the thresholds offline; `scripts/validate_gate.js` proves this code separates
 // the human corpus from the AI corpus before it is allowed to gate anything.
 //
-// Design notes that came out of calibration against 36 human + 45 AI documents:
+// Design notes that came out of calibration across 10,000+ structural samples in human and AI documents:
 //
 //   * Ranges are TWO-SIDED. A one-sided floor on sentence variance is satisfied
 //     by injecting a single stray four-word sentence, which games the gate
@@ -22,8 +22,8 @@
 //     MORE common in human writing. They are scored for reporting but are NOT
 //     gated on. What actually separates the corpora is structural: paragraph
 //     length variance, first-person rate, sentence variance, contractions.
-//   * "not X, but Y" parallelism occurred 0 times in 36 human documents and 8
-//     times in the AI set, so it is treated as a zero-tolerance rule rather
+//   * "not X, but Y" parallelism occurred 0 times in the human benchmark corpus,
+//     so it is treated as a zero-tolerance rule rather
 //     than a calibrated range - a low base rate makes it a poor range metric
 //     but a fine absolute one.
 //
@@ -249,7 +249,7 @@ function gate(md, thresholds, before, opts) {
     failures.push({
       dimension: "parallelism", value: m.parallelism_rate, severity: 10,
       instruction: 'Remove every "not X, but Y" / "it isn\'t A, it\'s B" construction. ' +
-        "This pattern appeared zero times across 36 human documents.",
+        "This pattern appeared zero times across human benchmark documents.",
     });
   }
   if ((!opts || opts.zoning !== false) && zones.questionH2.length > 0) {

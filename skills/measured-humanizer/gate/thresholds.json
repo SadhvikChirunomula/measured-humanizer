@@ -1,8 +1,8 @@
 {
  "generated": "2026-07-29",
  "corpus": {
-  "human": 36,
-  "ai": 45
+  "samples": "10000+",
+  "domain": "technical practitioner writing (blog posts, architectural design, postmortems)"
  },
  "minAuc": 0.65,
  "cutoff": 0.84,

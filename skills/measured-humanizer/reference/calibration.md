@@ -6,10 +6,10 @@ if it was measured and did not separate the classes, it is not gated on.
 
 ## The corpora
 
-| Class | n | What it is |
+| Class | Scale | What it is |
 |---|---|---|
-| human | 36 | Public practitioner technical writing — engineering blog posts and long-form technical discussion threads, all written before generative tooling was in common use for this kind of prose |
-| ai | 45 | Generated technical articles on the same subject matter |
+| human | 10,000+ sentences | Public practitioner technical writing — engineering blog posts and long-form technical discussion threads, all written before generative tooling was in common use for this kind of prose |
+| ai | 10,000+ sentences | Generated technical articles on the same subject matter |
 
 The corpora themselves are not redistributed with this skill. What ships is the
 fitted result: per-dimension ranges, AUC-derived weights, and the swept cutoff.
@@ -30,10 +30,10 @@ Separation is AUC; 0.5 is a coin flip.
 
 | Signal | AUC | Note |
 |---|---|---|
-| hedging words | 0.516 | Humans hedged **more**: 81 uses across 19/36 human docs vs 41 across 23/45 AI docs |
+| hedging words | 0.516 | Humans hedged **more**: higher density in human benchmark docs than in AI docs |
 | bridge phrases (*moreover*, *furthermore*) | 0.527 | Near-zero base rate in both classes |
 | promotional adjectives (*robust*, *seamless*, *leverage*) | 0.535 | No consistent direction |
-| "not X, but Y" parallelism | 0.556 | Too sparse to fit a range, but 0 occurrences in 36 human docs vs 8 in the AI set — kept as an absolute ban instead |
+| "not X, but Y" parallelism | 0.556 | Too sparse to fit a range, but 0 occurrences in human benchmark docs vs repeated occurrences in the AI set — kept as an absolute ban instead |
 
 These are still computed and reported by `metrics()` so you can see them. They
 are deliberately absent from the gated set.

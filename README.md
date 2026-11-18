@@ -25,6 +25,8 @@ That loop terminates. "Make this sound more human" does not.
 - [Usage & Integrations](#usage--integrations)
 - [Recalibration](#recalibration)
 - [Development & Testing](#development--testing)
+- [Contributing](#contributing)
+- [Security](#security)
 - [Limitations](#limitations)
 - [License](#license)
 
@@ -196,9 +198,17 @@ The shipped thresholds are fitted to technical practitioner prose. Marketing cop
 ## Development & Testing
 
 ```bash
-./test/run.sh
+bash ./test/run.sh
 ```
 Two fixtures carry the load: a document written to look generated must fail and get vetoed, and one written the way the corpus measures must pass.
+
+## Contributing
+
+We welcome contributions! Please review our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting pull requests or opening issues.
+
+## Security
+
+For security vulnerability reports, please refer to our [Security Policy](SECURITY.md).
 
 ## Limitations
 
@@ -208,4 +218,4 @@ Two fixtures carry the load: a document written to look generated must fail and 
 
 ## License
 
-MIT. The corpora themselves are not redistributed — what ships is the fitted result.
+This project is licensed under the [MIT License](LICENSE). The corpora themselves are not redistributed — what ships is the fitted result.

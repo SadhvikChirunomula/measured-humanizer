@@ -4,8 +4,8 @@
   "description": "An empirical, deterministic style gate and calibrator for AI writing that measures structural variance instead of pattern-matching word lists.",
   "main": "skills/measured-humanizer/gate/style_gate.js",
   "bin": {
-    "measured-humanizer": "./bin/measured-humanizer.js",
-    "measured-humanizer-mcp": "./bin/mcp-server.js"
+    "measured-humanizer": "bin/measured-humanizer.js",
+    "measured-humanizer-mcp": "bin/mcp-server.js"
   },
   "files": [
     "bin",

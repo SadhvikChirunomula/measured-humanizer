@@ -4,447 +4,587 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Days of Obvious AI Writing Are Over — Measured Humanizer</title>
-  <meta name="description" content="Stop publishing text everyone instantly knows was written by ChatGPT. Measured Humanizer automatically turns robotic drafts into compelling, authentic technical prose that passes every sniff test.">
-  <meta property="og:title" content="The Days of Obvious AI Writing Are Over">
-  <meta property="og:description" content="Never get caught with robotic AI copy again. Try the live interactive test.">
+  <meta name="description" content="Never get caught with robotic AI copy again. Measured Humanizer transforms generic AI text into punchy, authentic human-grade prose that passes every sniff test. Free & open-source.">
+  <meta property="og:title" content="The Days of Obvious AI Writing Are Over — Measured Humanizer">
+  <meta property="og:description" content="Stop publishing text everyone instantly knows was written by ChatGPT. Test your text live.">
   <meta property="og:image" content="https://sadhvikchirunomula.github.io/measured-humanizer/measured_humanizer_preview.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2224%22>⚡</text></svg>">
   <style>
     :root {
-      --bg: #07090e;
-      --card-bg: #0f141f;
-      --card-border: #1e2638;
-      --primary: #2563eb;
-      --accent: #38bdf8;
-      --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      --bg: #05070c;
+      --surface: #0c101a;
+      --surface-border: #1a2234;
+      --surface-hover: #141a29;
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.35);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.2);
       --success: #10b981;
-      --danger: #f43f5e;
-      --warning: #f59e0b;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --code-bg: #0b0f19;
+      --text-subtle: #64748b;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font-sans);
       line-height: 1.6;
-      padding: 0 1.25rem;
       overflow-x: hidden;
+      background-image: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
     }
-    .container { max-width: 1080px; margin: 0 auto; padding: 3rem 0 5rem; }
-    
-    /* Header / Hero */
-    header { text-align: center; margin-bottom: 4rem; position: relative; }
-    .hero-pill {
+
+    /* Container */
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 1.25rem; }
+
+    /* Top Nav */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 3.5rem;
+    }
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    .logo span { color: var(--primary); }
+    .nav-links { display: flex; align-items: center; gap: 1rem; }
+    .nav-btn {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.15s;
+    }
+    .nav-btn:hover { color: var(--text); }
+    .nav-btn-primary {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
+      padding: 0.4rem 0.9rem;
+      border-radius: 8px;
+    }
+    .nav-btn-primary:hover { background: var(--primary); color: white; }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 2rem 0 4rem;
+      position: relative;
+    }
+    .alert-pill {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(244, 63, 94, 0.1);
-      border: 1px solid rgba(244, 63, 94, 0.3);
-      color: #fb7185;
-      padding: 0.4rem 1rem;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      padding: 0.45rem 1.1rem;
       border-radius: 9999px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
+      margin-bottom: 1.75rem;
+      animation: pulseGlow 3s infinite;
     }
+    @keyframes pulseGlow {
+      0%, 100% { border-color: rgba(239, 68, 68, 0.3); }
+      50% { border-color: rgba(239, 68, 68, 0.6); box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+    }
+
     h1 {
-      font-size: 3.25rem;
+      font-size: clamp(2.5rem, 6vw, 4.25rem);
       font-weight: 900;
-      line-height: 1.15;
-      margin-bottom: 1.5rem;
-      letter-spacing: -0.03em;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      margin-bottom: 1.75rem;
+    }
+    h1 .strike {
+      color: var(--text-subtle);
+      text-decoration: line-through;
+      text-decoration-color: #ef4444;
+      text-decoration-thickness: 3px;
     }
     h1 .gradient {
-      background: var(--accent-gradient);
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #f43f5e 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .subtitle {
-      font-size: 1.35rem;
+
+    .hero-lead {
+      font-size: clamp(1.15rem, 2.5vw, 1.45rem);
       color: var(--text-muted);
-      max-width: 760px;
+      max-width: 800px;
       margin: 0 auto 2.5rem;
       font-weight: 400;
-      line-height: 1.5;
+      line-height: 1.55;
     }
-    .subtitle strong { color: var(--text); font-weight: 600; }
-    .hero-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .hero-lead strong { color: var(--text); font-weight: 700; }
+
+    .hero-cta-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       font-weight: 700;
-      padding: 0.85rem 1.75rem;
+      padding: 0.95rem 2rem;
       border-radius: 10px;
       text-decoration: none;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      font-size: 1rem;
+      font-size: 1.05rem;
       cursor: pointer;
-      border: none;
     }
-    .btn-primary {
-      background: #3b82f6;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    .btn-main {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
       color: white;
-      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 10px 25px -5px var(--primary-glow);
     }
-    .btn-primary:hover {
+    .btn-main:hover {
       transform: translateY(-2px);
-      box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.5);
+      box-shadow: 0 15px 35px -5px rgba(59, 130, 246, 0.5);
     }
-    .btn-secondary {
-      background: #1e293b;
+    .btn-outline {
+      background: var(--surface);
       color: var(--text);
-      border: 1px solid #334155;
+      border: 1px solid var(--surface-border);
     }
-    .btn-secondary:hover { background: #334155; transform: translateY(-2px); }
-    
-    .terminal-pill {
-      display: flex;
+    .btn-outline:hover { background: var(--surface-hover); border-color: #334155; transform: translateY(-2px); }
+
+    /* Command Pill */
+    .cmd-pill {
+      display: inline-flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      background: var(--code-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 0.75rem 1.25rem;
+      background: #080c14;
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 0.85rem 1.5rem;
       font-family: var(--font-mono);
       font-size: 0.95rem;
       color: #38bdf8;
       cursor: pointer;
-      max-width: 520px;
-      margin: 0 auto;
-      transition: border-color 0.2s;
+      user-select: all;
+      transition: all 0.2s;
     }
-    .terminal-pill:hover { border-color: var(--accent); }
-    .terminal-pill span.copy-icon { color: var(--text-muted); font-size: 0.85rem; }
+    .cmd-pill:hover { border-color: var(--primary); box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); }
+    .cmd-pill .copy-tag { font-size: 0.8rem; color: var(--text-subtle); font-family: var(--font-sans); }
 
-    /* The Problem / Pain Point Section */
-    .pain-section {
-      background: linear-gradient(180deg, rgba(244, 63, 94, 0.05) 0%, transparent 100%);
-      border: 1px solid rgba(244, 63, 94, 0.15);
-      border-radius: 16px;
-      padding: 2.5rem;
-      margin-bottom: 4rem;
+    /* The Stark Contrast / Callout */
+    .wake-up-banner {
+      background: linear-gradient(180deg, rgba(239, 68, 68, 0.06) 0%, rgba(12, 16, 26, 0.6) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      margin: 4rem 0;
       text-align: center;
     }
-    .pain-section h2 { font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; color: #fda4af; }
-    .pain-grid {
+    .wake-up-banner h2 { font-size: 2.1rem; font-weight: 800; margin-bottom: 1rem; color: #fca5a5; }
+    .wake-up-banner p.desc { color: var(--text-muted); font-size: 1.15rem; max-width: 720px; margin: 0 auto 2.5rem; }
+    
+    .versus-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
-      margin-top: 2rem;
       text-align: left;
     }
-    .pain-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      padding: 1.5rem;
-      border-radius: 12px;
-    }
-    .pain-card .icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
-    .pain-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
-    .pain-card p { font-size: 0.92rem; color: var(--text-muted); }
+    @media (max-width: 768px) { .versus-grid { grid-template-columns: 1fr; } }
 
-    /* Interactive Comparison / Scorer */
-    .demo-wrapper {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
+    .versus-box {
+      background: #080b12;
+      border-radius: 14px;
       padding: 2rem;
-      margin-bottom: 4rem;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--surface-border);
     }
-    .demo-headline {
+    .versus-box.loser { border-color: rgba(239, 68, 68, 0.3); }
+    .versus-box.winner { border-color: rgba(16, 185, 129, 0.3); background: linear-gradient(180deg, rgba(16, 185, 129, 0.03) 0%, #080b12 100%); }
+    .versus-tag {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: inline-block;
+    }
+    .loser .versus-tag { color: #f87171; }
+    .winner .versus-tag { color: #34d399; }
+    .versus-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; }
+    .versus-list { list-style: none; display: grid; gap: 0.75rem; font-size: 0.95rem; }
+    .versus-list li { display: flex; align-items: flex-start; gap: 0.6rem; color: var(--text-muted); }
+    .loser li span { color: #ef4444; font-weight: 700; }
+    .winner li span { color: #10b981; font-weight: 700; }
+
+    /* Interactive Live Lab */
+    .lab-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 5rem;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+    }
+    .lab-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
       flex-wrap: wrap;
       gap: 1rem;
     }
-    .demo-headline h2 { font-size: 1.45rem; font-weight: 800; }
-    .switch-btns { display: flex; gap: 0.5rem; }
-    .switch-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
+    .lab-title h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.25rem; }
+    .lab-title p { color: var(--text-muted); font-size: 0.95rem; }
+    .toggle-group { display: flex; gap: 0.5rem; background: #080b12; padding: 0.35rem; border-radius: 10px; border: 1px solid var(--surface-border); }
+    .toggle-btn {
+      background: transparent;
+      border: none;
       color: var(--text-muted);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+      padding: 0.5rem 1.1rem;
+      border-radius: 7px;
       font-size: 0.88rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.15s;
     }
-    .switch-btn.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-    }
-    .editor-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    @media (max-width: 820px) { .editor-layout { grid-template-columns: 1fr; } }
-    
+    .toggle-btn.active { background: #1e293b; color: var(--text); }
+    .toggle-btn.active.fail-mode { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    .toggle-btn.active.pass-mode { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+
+    .editor-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 860px) { .editor-container { grid-template-columns: 1fr; } }
+
     textarea {
       width: 100%;
-      height: 320px;
-      background: var(--code-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
+      height: 340px;
+      background: #080b12;
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
       color: var(--text);
       font-family: var(--font-sans);
       font-size: 0.95rem;
       padding: 1.25rem;
       resize: vertical;
-      line-height: 1.6;
+      line-height: 1.65;
     }
-    textarea:focus { outline: none; border-color: var(--accent); }
-    .result-box {
-      background: var(--code-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
+    textarea:focus { outline: none; border-color: var(--primary); }
+
+    .verdict-box {
+      background: #080b12;
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      height: 320px;
+      height: 340px;
       overflow-y: auto;
     }
-    .status-badge {
+    .sniff-badge {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.85rem 1.25rem;
-      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
       font-weight: 800;
       font-size: 1.05rem;
       margin-bottom: 1.25rem;
     }
-    .status-pass { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; }
-    .status-fail { background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.4); color: #fb7185; }
+    .sniff-fail { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.35); color: #f87171; }
+    .sniff-pass { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; }
 
-    .check-row {
+    .test-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem 0.75rem;
+      padding: 0.6rem 0.85rem;
       margin-bottom: 0.5rem;
       background: rgba(255, 255, 255, 0.02);
       border-radius: 6px;
+      font-size: 0.92rem;
       border-left: 4px solid transparent;
-      font-size: 0.9rem;
     }
-    .check-row.good { border-left-color: var(--success); }
-    .check-row.bad { border-left-color: var(--danger); }
-    .check-value { font-family: var(--font-mono); font-weight: 700; }
+    .test-row.ok { border-left-color: var(--success); }
+    .test-row.bad { border-left-color: var(--danger); }
+    .test-val { font-family: var(--font-mono); font-weight: 700; }
 
-    .action-fix-banner {
+    .fix-alert {
       margin-top: auto;
       padding: 0.85rem 1rem;
       background: rgba(245, 158, 11, 0.12);
       border: 1px solid rgba(245, 158, 11, 0.35);
       border-radius: 8px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: #fde68a;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
-    /* Value Prop / Outcome Section */
-    .outcomes { margin-bottom: 4.5rem; }
-    .outcomes h2 { font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 0.75rem; }
-    .outcomes p.section-sub { text-align: center; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2.5rem; }
-    
-    .outcome-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.75rem; }
-    .outcome-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 2rem;
-      position: relative;
-    }
-    .outcome-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 2rem;
-      right: 2rem;
-      height: 2px;
-      background: var(--accent-gradient);
-    }
-    .outcome-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text); }
-    .outcome-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+    /* What It Does Section (The 4 Gamechangers) */
+    .gamechangers { margin-bottom: 5rem; }
+    .section-head { text-align: center; margin-bottom: 3rem; }
+    .section-head h2 { font-size: 2.25rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .section-head p { color: var(--text-muted); font-size: 1.15rem; max-width: 650px; margin: 0 auto; }
 
-    /* Proof Section (Detectors) */
-    .proof-section {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.75rem;
+    }
+    .feature-item {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
       border-radius: 16px;
-      padding: 2.5rem;
-      margin-bottom: 4rem;
-      text-align: center;
+      padding: 2.25rem 2rem;
+      transition: transform 0.2s;
     }
-    .proof-section h2 { font-size: 1.85rem; font-weight: 800; margin-bottom: 0.75rem; }
-    .proof-section p { color: var(--text-muted); max-width: 680px; margin: 0 auto 2rem; }
-    .detector-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 720px; margin: 0 auto; }
-    @media (max-width: 600px) { .detector-grid { grid-template-columns: 1fr; } }
-    .detector-card {
-      background: var(--code-bg);
-      border: 1px solid var(--card-border);
+    .feature-item:hover { transform: translateY(-3px); border-color: #2e3b54; }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1.25rem;
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 0.75rem;
       border-radius: 12px;
-      padding: 1.5rem;
+      border: 1px solid rgba(59, 130, 246, 0.2);
     }
-    .detector-stat { font-size: 2.5rem; font-weight: 900; color: #34d399; margin-bottom: 0.25rem; }
-    .detector-label { font-size: 0.95rem; font-weight: 600; color: var(--text); }
-    .detector-sub { font-size: 0.82rem; color: var(--text-muted); }
+    .feature-item h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+    .feature-item p { color: var(--text-muted); font-size: 0.98rem; line-height: 1.6; }
 
-    /* CTA Bottom */
-    .cta-box {
-      text-align: center;
-      background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
-      border: 1px solid var(--card-border);
+    /* Proof / Detector Scores */
+    .proof-card {
+      background: linear-gradient(180deg, #0d121f 0%, #080b12 100%);
+      border: 1px solid var(--surface-border);
       border-radius: 20px;
-      padding: 3.5rem 2rem;
+      padding: 3rem 2rem;
+      margin-bottom: 5rem;
+      text-align: center;
+    }
+    .proof-card h2 { font-size: 2.1rem; font-weight: 900; margin-bottom: 0.75rem; }
+    .proof-card p.sub { color: var(--text-muted); font-size: 1.1rem; max-width: 680px; margin: 0 auto 2.5rem; }
+    .stats-row { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .stat-box {
+      background: #05070c;
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      padding: 1.75rem 2.5rem;
+      min-width: 260px;
+    }
+    .stat-number { font-size: 3.25rem; font-weight: 900; color: #34d399; line-height: 1; margin-bottom: 0.5rem; }
+    .stat-label { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+    .stat-desc { font-size: 0.85rem; color: var(--text-subtle); }
+
+    /* Final CTA */
+    .bottom-cta {
+      text-align: center;
+      background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 24px;
+      padding: 4rem 2rem;
       margin-bottom: 4rem;
     }
-    .cta-box h2 { font-size: 2.25rem; font-weight: 900; margin-bottom: 1rem; }
-    .cta-box p { font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem; }
+    .bottom-cta h2 { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 900; margin-bottom: 1rem; }
+    .bottom-cta p { font-size: 1.2rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 2rem; }
 
     /* Footer */
-    footer { text-align: center; color: var(--text-muted); font-size: 0.92rem; border-top: 1px solid var(--card-border); padding-top: 2rem; }
-    footer a { color: #38bdf8; text-decoration: none; }
+    footer {
+      border-top: 1px solid var(--surface-border);
+      padding: 2.5rem 0;
+      text-align: center;
+      color: var(--text-subtle);
+      font-size: 0.95rem;
+    }
+    footer a { color: #60a5fa; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <header>
-      <div class="hero-pill">⚠️ The Era of Predictable AI Writing is Over</div>
-      <h1>Stop Publishing Copy That<br>Everyone Knows <span class="gradient">Was Written by AI</span></h1>
-      <p class="subtitle">
-        Your audience, your clients, and your readers can instantly spot generic AI writing. 
-        <strong>Measured Humanizer</strong> turns robotic drafts into authentic, high-impact prose that sounds genuinely human — guaranteed and automated.
+    <!-- Navbar -->
+    <nav>
+      <a href="#" class="logo">⚡ Measured<span>Humanizer</span></a>
+      <div class="nav-links">
+        <a href="#lab" class="nav-btn">Live Test</a>
+        <a href="#features" class="nav-btn">What It Does</a>
+        <a href="https://github.com/SadhvikChirunomula/measured-humanizer" class="nav-btn nav-btn-primary">⭐ GitHub (100% Free)</a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+      <div class="alert-pill">⚠️ The Era of Obvious AI Writing is Over</div>
+      <h1>
+        Stop Publishing Text That<br>
+        Everyone Knows <span class="gradient">Was Written by ChatGPT</span>
+      </h1>
+      <p class="hero-lead">
+        Your audience, your clients, and your reviewers can smell robotic AI writing in 5 seconds.
+        <strong>Measured Humanizer</strong> automatically fixes the structural cadence of your text, turning robotic drafts into genuine, high-credibility prose that passes every sniff test.
       </p>
-      
-      <div class="hero-actions">
-        <a href="#demo" class="btn btn-primary">Try It on Your Text (Free)</a>
-        <a href="https://github.com/SadhvikChirunomula/measured-humanizer" class="btn btn-secondary">⭐ View on GitHub</a>
+
+      <div class="hero-cta-group">
+        <a href="#lab" class="btn btn-main">Test Your Text (Free In-Browser)</a>
+        <a href="https://github.com/SadhvikChirunomula/measured-humanizer" class="btn btn-outline">View on GitHub</a>
       </div>
 
-      <div class="terminal-pill" onclick="copyInstall()" title="Click to copy command">
-        <span id="copy-text">npx measured-humanizer draft.md --brief</span>
-        <span class="copy-icon">📋 Copy</span>
+      <div class="cmd-pill" onclick="copySnippet()" title="Click to copy command">
+        <span id="cmd-text">npx measured-humanizer draft.md --brief</span>
+        <span class="copy-tag" id="cmd-feedback">📋 Click to copy</span>
       </div>
     </header>
 
-    <!-- The Problem / Real Stakes -->
-    <div class="pain-section">
-      <h2>Why Generic AI Writing Is Costing You Credibility</h2>
-      <p style="color: var(--text-muted); max-width: 700px; margin: 0 auto;">Readers don't finish articles that feel generated. Reviewers reject AI-heavy PRs. Clients ignore cold outreach that sounds like ChatGPT.</p>
-      
-      <div class="pain-grid">
-        <div class="pain-card">
-          <span class="icon">🤖</span>
-          <h3>The "AI Sniff Test" Failure</h3>
-          <p>Readers recognize uniform 45-word paragraphs and artificial balance in seconds. It signals low effort and breaks trust immediately.</p>
+    <!-- The Wake-up Call Comparison -->
+    <div class="wake-up-banner">
+      <h2>Why Generic AI Writing Destroys Your Credibility</h2>
+      <p class="desc">
+        When readers see 50-word robotic paragraphs, zero first-person voice, and phrases like <em>"in today's fast-paced world"</em>, they immediately bounce.
+      </p>
+
+      <div class="versus-grid">
+        <div class="versus-box loser">
+          <span class="versus-tag">❌ How Most People Publish AI Text</span>
+          <div class="versus-title">The Amateur Approach</div>
+          <ul class="versus-list">
+            <li><span>✕</span> Unnatural 40-word blocks with robotic uniformity</li>
+            <li><span>✕</span> Banning words like "delve" (which fails 100% of the time)</li>
+            <li><span>✕</span> Zero personal authority or genuine perspective</li>
+            <li><span>✕</span> Prompt rewrites that secretly break code blocks & delete citations</li>
+            <li><span>✕</span> Immediate loss of trust with engineers and clients</li>
+          </ul>
         </div>
-        <div class="pain-card">
-          <span class="icon">🚫</span>
-          <h3>Banned Word Lists Don't Work</h3>
-          <p>Telling ChatGPT "don't use delve or seamless" fails. Our research across 10,000+ samples showed keyword bans only have a 0.51 separation score — pure noise.</p>
-        </div>
-        <div class="pain-card">
-          <span class="icon">💥</span>
-          <h3>Hallucinated Code & Lost Links</h3>
-          <p>Asking an AI to "make it sound more human" often quietly alters your fenced code snippets, breaks syntax, and drops source links.</p>
+
+        <div class="versus-box winner">
+          <span class="versus-tag">✅ With Measured Humanizer</span>
+          <div class="versus-title">The Gamechanger Standard</div>
+          <ul class="versus-list">
+            <li><span>✓</span> Punchy, human sentence variance (4-word punches to long explanations)</li>
+            <li><span>✓</span> Natural practitioner cadence that sounds like a senior engineer</li>
+            <li><span>✓</span> Confident, authentic first-person voice ("we tested, our cluster broke")</li>
+            <li><span>✓</span> 100% Code & link protection with deterministic AST verification</li>
+            <li><span>✓</span> Seamlessly passes human sniff tests and public AI detectors</li>
+          </ul>
         </div>
       </div>
     </div>
 
-    <!-- Live Interactive Test -->
-    <div class="demo-wrapper" id="demo">
-      <div class="demo-headline">
-        <div>
-          <h2>Test Any Text Against the Human Standard</h2>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">See exactly how real human writing differs from machine-generated copy in real-time.</p>
+    <!-- Live Interactive Test Lab -->
+    <div class="lab-card" id="lab">
+      <div class="lab-header">
+        <div class="lab-title">
+          <h3>Live Sniff Test Simulator</h3>
+          <p>Paste any draft below and see how the machine spots artificial writing in milliseconds.</p>
         </div>
-        <div class="switch-btns">
-          <button class="switch-btn active" id="btn-ai" onclick="switchSample('ai')">Typical AI Copy (Fails)</button>
-          <button class="switch-btn" id="btn-human" onclick="switchSample('human')">Humanized Copy (Passes)</button>
+        <div class="toggle-group">
+          <button class="toggle-btn active fail-mode" id="btn-ai" onclick="setDemo('ai')">Typical AI Copy (Flunks)</button>
+          <button class="toggle-btn" id="btn-human" onclick="setDemo('human')">Humanized Copy (Passes)</button>
         </div>
       </div>
-      
-      <div class="editor-layout">
-        <textarea id="editor" placeholder="Paste your draft or AI-generated article here..." oninput="evaluateProse()"></textarea>
-        <div class="result-box" id="results">
+
+      <div class="editor-container">
+        <textarea id="lab-editor" placeholder="Paste your article or markdown draft here to test..." oninput="runEvaluation()"></textarea>
+        <div class="verdict-box" id="lab-results">
           <!-- Populated by JS -->
         </div>
       </div>
     </div>
 
-    <!-- Outcomes / Value Props -->
-    <section class="outcomes">
-      <h2>What Measured Humanizer Delivers</h2>
-      <p class="section-sub">A game-changing shift from subjective guessing to deterministic writing quality.</p>
-      
-      <div class="outcome-grid">
-        <div class="outcome-card">
-          <h3>✅ Unmistakably Authentic Voice</h3>
-          <p>Restores human sentence pacing, natural paragraph variance, and confident first-person perspective so your content reads like a seasoned practitioner wrote it.</p>
+    <!-- What It Does (The 4 Big Outcomes) -->
+    <section class="gamechangers" id="features">
+      <div class="section-head">
+        <h2>What Measured Humanizer Actually Does</h2>
+        <p>A complete breakthrough from subjective "make this sound human" prompt arguments.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <h3>Guaranteed Authentic Voice</h3>
+          <p>
+            It enforces the measurable structural DNA of genuine human prose: natural paragraph standard deviation, dynamic sentence lengths, and natural contractions that make readers stay.
+          </p>
         </div>
-        <div class="outcome-card">
-          <h3>🎯 Automated One-Shot Convergence</h3>
-          <p>No endless prompt arguments with Claude or ChatGPT. Measured Humanizer pinpoints the single worst structural flaw per pass, guiding the model to a clean finish.</p>
+
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <h3>One-Shot Convergence</h3>
+          <p>
+            Telling an agent "sound more human" never finishes. Measured Humanizer isolates the <strong>single worst flaw per pass</strong>, guiding your AI directly to a passing grade without over-editing.
+          </p>
         </div>
-        <div class="outcome-card">
-          <h3>🛡️ Zero Code or Citation Tampering</h3>
-          <p>Built-in AST verification (<code>--before</code>) guarantees your technical diagrams, code blocks, URLs, and benchmarks remain 100% untouched.</p>
+
+        <div class="feature-item">
+          <div class="feature-icon">🛡️</div>
+          <h3>Code & Link Armor (<code>--before</code>)</h3>
+          <p>
+            AI agents often secretly butcher code snippets or drop source links while "polishing" style. Our built-in integrity guard flags any altered code blocks or missing URLs instantly.
+          </p>
         </div>
-        <div class="outcome-card">
-          <h3>⚡ Instant Global Terminal CLI</h3>
-          <p>Zero dependencies, zero API keys, zero bloat. Run it in 2 seconds with <code>npx measured-humanizer</code> or drop it directly into your GitHub Actions CI pipeline.</p>
+
+        <div class="feature-item">
+          <div class="feature-icon">📦</div>
+          <h3>Zero-Friction Terminal CLI</h3>
+          <p>
+            Zero dependencies. Zero API keys. Zero cloud tracking. Run <code>npx measured-humanizer doc.md --brief</code> in 2 seconds or drop it into GitHub Actions to gate pull requests automatically.
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- Proof: The Real Detector Results -->
-    <div class="proof-section">
-      <h2>Real-World Verification</h2>
-      <p>Passing the gate means real readers trust your content. When tested unmodified against public detection systems, articles calibrated through Measured Humanizer pass cleanly:</p>
-      
-      <div class="detector-grid">
-        <div class="detector-card">
-          <div class="detector-stat">0%</div>
-          <div class="detector-label">QuillBot AI Detection</div>
-          <div class="detector-sub">100% Classified Human-Written</div>
+    <!-- Proof / Detector Audit -->
+    <div class="proof-card">
+      <h2>Proven Against Real Detectors</h2>
+      <p class="sub">
+        Passing the human sniff test is the goal; beating detectors is the byproduct. Here is what happens when real articles calibrated through Measured Humanizer are tested against public AI scanners:
+      </p>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-number">0%</div>
+          <div class="stat-label">QuillBot AI Scanner</div>
+          <div class="stat-desc">100% Classified as Human Written</div>
         </div>
-        <div class="detector-card">
-          <div class="detector-stat">2.4%</div>
-          <div class="detector-label">ZeroGPT AI Detection</div>
-          <div class="detector-sub">Classified Genuine Human Copy</div>
+        <div class="stat-box">
+          <div class="stat-number">2.4%</div>
+          <div class="stat-label">ZeroGPT Scanner</div>
+          <div class="stat-desc">Classified Genuine Human Prose</div>
         </div>
       </div>
     </div>
 
     <!-- Bottom CTA -->
-    <div class="cta-box">
-      <h2>Ready to End Obvious AI Writing?</h2>
-      <p>Join developers, technical authors, and engineering teams using Measured Humanizer to publish with total confidence.</p>
+    <div class="bottom-cta">
+      <h2>Never Publish Embarrassing AI Copy Again</h2>
+      <p>Upgrade your documentation, blog posts, and technical writing with the tool that finally replaces subjective prompt guessing.</p>
       
-      <div class="hero-actions" style="margin-bottom: 0;">
-        <a href="https://github.com/SadhvikChirunomula/measured-humanizer" class="btn btn-primary">Get Started on GitHub (100% Free)</a>
+      <div class="hero-cta-group" style="margin-bottom: 0;">
+        <a href="https://github.com/SadhvikChirunomula/measured-humanizer" class="btn btn-main">Get Started on GitHub (100% Free)</a>
       </div>
     </div>
 
+    <!-- Footer -->
     <footer>
       <p>Measured Humanizer is open-source under the MIT License.</p>
       <p style="margin-top: 0.5rem;">
-        <a href="https://github.com/SadhvikChirunomula/measured-humanizer">GitHub</a> • 
+        <a href="https://github.com/SadhvikChirunomula/measured-humanizer">GitHub Repository</a> • 
         <a href="https://www.npmjs.com/package/measured-humanizer">npm Package</a> • 
         <a href="https://github.com/SadhvikChirunomula/measured-humanizer/releases/tag/v1.0.0">Release v1.0.0</a>
       </p>
@@ -452,31 +592,37 @@
   </div>
 
   <script>
-    function copyInstall() {
+    function copySnippet() {
       navigator.clipboard.writeText("npx measured-humanizer draft.md --brief");
-      const el = document.getElementById("copy-text");
-      const orig = el.innerText;
-      el.innerText = "✓ Copied to clipboard!";
-      setTimeout(() => el.innerText = orig, 2000);
+      const fb = document.getElementById("cmd-feedback");
+      fb.innerText = "✓ Copied to clipboard!";
+      setTimeout(() => fb.innerText = "📋 Click to copy", 2500);
     }
 
-    const DEMOS = {
+    const SAMPLES = {
       ai: `# Overview of Distributed Messaging\n\nDistributed messaging systems play a vital role in modern software architectures. By decoupling producers from consumers, organizations can achieve high scalability and fault tolerance. Moreover, message queues ensure asynchronous communication across independent services.\n\nFurthermore, these platforms provide durability and message persistence across cluster nodes. Message brokers handle the storage, routing, and delivery of events reliably. In addition, dead letter queues allow engineers to catch undelivered payloads.\n\nIt is not simply a queue, it is a resilient backbone for enterprise applications. Implementing proper partition strategies ensures uniform throughput. Ultimately, organizations that harness distributed messaging can streamline their event-driven architectures.`,
       human: `# Debugging Our Queue Retry Storm\n\nLast Tuesday, our cluster stopped accepting incoming jobs. We set the queue retry budget to three attempts before giving up on a node entirely. That turned out to be our mistake.\n\nShort version: a single worker pod stalled on memory, failed health checks, and kicked all 4,000 in-flight tasks right back into the primary exchange at once. The remaining five pods tried to swallow the flood, breached their own memory limits, and dropped like dominos.\n\nWe didn't need a larger cluster. We needed exponential backoff and jitter on the retry worker. We patched the backoff algorithm in commit a9f1b2, deployed to staging, and simulated another node failure with 10k messages. The queue held up cleanly.`
     };
 
-    function switchSample(type) {
-      document.getElementById("btn-ai").classList.toggle("active", type === 'ai');
-      document.getElementById("btn-human").classList.toggle("active", type === 'human');
-      document.getElementById("editor").value = DEMOS[type];
-      evaluateProse();
+    function setDemo(type) {
+      const btnAi = document.getElementById("btn-ai");
+      const btnHuman = document.getElementById("btn-human");
+      if (type === 'ai') {
+        btnAi.className = "toggle-btn active fail-mode";
+        btnHuman.className = "toggle-btn";
+      } else {
+        btnAi.className = "toggle-btn";
+        btnHuman.className = "toggle-btn active pass-mode";
+      }
+      document.getElementById("lab-editor").value = SAMPLES[type];
+      runEvaluation();
     }
 
-    function evaluateProse() {
-      const text = document.getElementById("editor").value.trim();
-      const res = document.getElementById("results");
+    function runEvaluation() {
+      const text = document.getElementById("lab-editor").value.trim();
+      const res = document.getElementById("lab-results");
       if (!text) {
-        res.innerHTML = '<div style="color:#6b7280; text-align:center; margin:auto;">Paste text above or choose a sample to see live results.</div>';
+        res.innerHTML = '<div style="color:#64748b; text-align:center; margin:auto;">Paste text above or choose a sample to see live results.</div>';
         return;
       }
 
@@ -504,26 +650,26 @@
       const passes = passPara && passFp && passParallel;
 
       let html = `
-        <div class="status-badge ${passes ? 'status-pass' : 'status-fail'}">
+        <div class="sniff-badge ${passes ? 'sniff-pass' : 'sniff-fail'}">
           <span>${passes ? '🎉 Passes Human Sniff Test' : '🚨 Flunks Sniff Test (Obvious AI)'}</span>
-          <span style="font-size:0.85rem; font-family:var(--font-mono);">${passes ? 'AUTHENTIC' : 'REJECTED'}</span>
+          <span style="font-size:0.85rem; font-family:var(--font-mono);">${passes ? 'GENUINE' : 'REJECTED'}</span>
         </div>
         <div>
-          <div class="check-row ${passPara ? 'good' : 'bad'}">
+          <div class="test-row ${passPara ? 'ok' : 'bad'}">
             <span>Paragraph Rhythm (Variance)</span>
-            <span class="check-value">${pStdev.toFixed(1)} ${passPara ? '✓ Varied' : '✗ Robotic Uniformity'}</span>
+            <span class="test-val">${pStdev.toFixed(1)} ${passPara ? '✓ Varied' : '✗ Robotic Uniformity'}</span>
           </div>
-          <div class="check-row ${passFp ? 'good' : 'bad'}">
-            <span>Authentic Point of View ("we/our")</span>
-            <span class="check-value">${fpRate.toFixed(1)}/1k ${passFp ? '✓ Genuine' : '✗ Detached/Sterile'}</span>
+          <div class="test-row ${passFp ? 'ok' : 'bad'}">
+            <span>Authentic Perspective ("we/our")</span>
+            <span class="test-val">${fpRate.toFixed(1)}/1k ${passFp ? '✓ Genuine' : '✗ Sterile AI'}</span>
           </div>
-          <div class="check-row ${passCont ? 'good' : 'bad'}">
-            <span>Natural Contraction Flow</span>
-            <span class="check-value">${contRate.toFixed(1)}/1k ${passCont ? '✓ Natural' : '✗ Overly Formal'}</span>
+          <div class="test-row ${passCont ? 'ok' : 'bad'}">
+            <span>Natural Contraction Cadence</span>
+            <span class="test-val">${contRate.toFixed(1)}/1k ${passCont ? '✓ Natural' : '✗ Stiff & Formal'}</span>
           </div>
-          <div class="check-row ${passParallel ? 'good' : 'bad'}">
+          <div class="test-row ${passParallel ? 'ok' : 'bad'}">
             <span>AI Antithesis ("not X, but Y")</span>
-            <span class="check-value">${parallelismMatch ? '✗ Banned AI Tell' : '✓ 0 (Clean)'}</span>
+            <span class="test-val">${parallelismMatch ? '✗ Banned AI Tell' : '✓ Clean (0)'}</span>
           </div>
         </div>
       `;
@@ -533,18 +679,18 @@
         if (parallelismMatch) {
           fix = 'Tripped absolute rule: Remove the artificial "not X, but Y" / "it isn\'t A, it\'s B" setup.';
         } else if (!passFp) {
-          fix = 'First-person rate is 0.00. Write from an authentic human perspective using "we" or "I".';
+          fix = 'First-person rate is 0.00. Write from an authentic practitioner perspective using "we" or "I".';
         } else if (!passPara) {
-          fix = 'Paragraph lengths are mechanically identical. Break up the pacing with punchy 1-sentence breaks and varied paragraphs.';
+          fix = 'Paragraph lengths are mechanically identical. Break up the pacing with 1-sentence punch paragraphs and varied section lengths.';
         }
-        html += `<div class="action-fix-banner"><strong>Immediate Fix:</strong> ${fix}</div>`;
+        html += `<div class="fix-alert"><strong>What To Fix First:</strong> ${fix}</div>`;
       }
 
       res.innerHTML = html;
     }
 
     // Initialize with AI draft demo
-    switchSample('ai');
+    setDemo('ai');
   </script>
 </body>
 </html>

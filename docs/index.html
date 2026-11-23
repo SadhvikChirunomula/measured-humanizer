@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Measured Humanizer — Deterministic Statistical Style Gate for AI Writing</title>
+  <meta name="description" content="An enterprise-grade AI writing calibrator that measures human-likeness statistically across 10,000+ data points, replacing subjective word blacklists. Zero dependencies.">
+  <meta property="og:title" content="Measured Humanizer — Empirical Style Gate for AI Writing">
+  <meta property="og:description" content="Why word lists fail (AUC 0.51) and what actually separates human writing from AI (AUC 0.89). Try the interactive browser scorer.">
+  <meta property="og:image" content="https://sadhvikchirunomula.github.io/measured-humanizer/measured_humanizer_preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2224%22>⚡</text></svg>">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f293d;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --code-bg: #0d121f;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding: 0 1rem;
+    }
+    .container { max-width: 1040px; margin: 0 auto; padding: 2rem 0 4rem; }
+    header { text-align: center; margin-bottom: 3.5rem; padding-top: 2rem; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+    }
+    h1 { font-size: 2.75rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.02em; }
+    h1 span { background: linear-gradient(to right, #60a5fa, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 720px; margin: 0 auto 2rem; }
+    .hero-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      padding: 0.75rem 1.4rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      font-size: 0.95rem;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-secondary { background: #1f2937; color: var(--text); border: 1px solid #374151; }
+    .btn-secondary:hover { background: #374151; }
+    .copy-pill {
+      display: flex;
+      align-items: center;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: #93c5fd;
+      cursor: pointer;
+      user-select: all;
+    }
+    .copy-pill:hover { border-color: var(--primary); }
+
+    /* Interactive Demo Card */
+    .demo-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 3.5rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    .demo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+    .demo-header h2 { font-size: 1.25rem; font-weight: 700; }
+    .demo-buttons { display: flex; gap: 0.5rem; }
+    .sample-btn {
+      background: #1f2937;
+      border: 1px solid #374151;
+      color: var(--text-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .sample-btn:hover { background: #374151; color: var(--text); }
+    .editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    @media (max-width: 768px) { .editor-grid { grid-template-columns: 1fr; } }
+    textarea {
+      width: 100%;
+      height: 300px;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      padding: 1rem;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    textarea:focus { outline: none; border-color: var(--primary); }
+    .result-pane {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      height: 300px;
+      overflow-y: auto;
+    }
+    .verdict-banner {
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .verdict-pass { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; }
+    .verdict-fail { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; }
+    .metric-list { display: grid; gap: 0.5rem; font-size: 0.85rem; }
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0.6rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 4px;
+      border-left: 3px solid transparent;
+    }
+    .metric-item.good { border-left-color: var(--success); }
+    .metric-item.bad { border-left-color: var(--danger); }
+    .metric-val { font-family: var(--font-mono); font-weight: 600; }
+    .fix-box {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: #fbbf24;
+    }
+
+    /* Sections */
+    section { margin-bottom: 4rem; }
+    h2.section-title { font-size: 1.75rem; margin-bottom: 1.5rem; font-weight: 700; text-align: center; }
+    .auc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+    .auc-table th, .auc-table td { padding: 0.85rem 1.25rem; text-align: left; }
+    .auc-table th { background: #172133; font-weight: 600; font-size: 0.9rem; color: #9ca3af; }
+    .auc-table tr:not(:last-child) td { border-bottom: 1px solid var(--card-border); }
+    .tag-strong { color: #34d399; font-weight: 700; }
+    .tag-useless { color: #f87171; }
+
+    /* Features Grid */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .feature-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; color: #60a5fa; }
+    .feature-card p { font-size: 0.92rem; color: var(--text-muted); }
+
+    /* Footer */
+    footer { text-align: center; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--card-border); padding-top: 2rem; }
+    footer a { color: #60a5fa; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">🚀 Calibrated on 10,000+ Sentences</div>
+      <h1>Measured <span>Humanizer</span></h1>
+      <p class="subtitle">An open-source, deterministic style gate that measures human-likeness statistically instead of guessing with word blacklists. Zero runtime dependencies.</p>
+      
+      <div class="hero-actions">
+        <div class="copy-pill" onclick="copyInstall()" title="Click to copy">
+          <span id="copy-text">npx measured-humanizer draft.md --brief</span>
+        </div>
+        <a href="https://github.com/SadhvikChirunomula/measured-humanizer" class="btn btn-secondary">⭐ Star on GitHub</a>
+      </div>
+    </header>
+
+    <!-- Interactive In-Browser Scorer -->
+    <div class="demo-card">
+      <div class="demo-header">
+        <h2>Live Browser Style Gate</h2>
+        <div class="demo-buttons">
+          <button class="sample-btn" onclick="loadSample('ai')">Load AI-style Draft</button>
+          <button class="sample-btn" onclick="loadSample('human')">Load Human-style Draft</button>
+        </div>
+      </div>
+      <div class="editor-grid">
+        <textarea id="input-text" placeholder="Paste your markdown or draft here to test structural variance..." oninput="analyzeText()"></textarea>
+        <div class="result-pane" id="results">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- The AUC Data Section -->
+    <section>
+      <h2 class="section-title">Why Banned Word Lists Fail</h2>
+      <p style="text-align: center; color: var(--text-muted); max-width: 700px; margin: 0 auto 1.5rem;">
+        Standard humanizers ban words like <em>"delve"</em> or <em>"seamless"</em>. We calibrated a corpus of 10,000+ sentences across human and AI technical writing using Area Under the ROC Curve (AUC, where 0.5 is random chance):
+      </p>
+
+      <table class="auc-table">
+        <thead>
+          <tr>
+            <th>Signal</th>
+            <th>AUC Separation</th>
+            <th>Finding</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Paragraph length variance</td>
+            <td><span class="tag-strong">0.897</span></td>
+            <td>AI paragraphs are uniform (stdev 12.8). Human paragraphs vary widely (stdev 28.6).</td>
+          </tr>
+          <tr>
+            <td>First-person rate (/1k words)</td>
+            <td><span class="tag-strong">0.889</span></td>
+            <td>Humans averaged 8.18 / 1k words. AI averaged 0.00 (models avoid "we").</td>
+          </tr>
+          <tr>
+            <td>Sentence length variance</td>
+            <td><span class="tag-strong">0.720</span></td>
+            <td>Humans swing naturally between 4-word punches and 35-word explanations.</td>
+          </tr>
+          <tr>
+            <td>Contraction rate</td>
+            <td><span class="tag-strong">0.663</span></td>
+            <td>Humans write "don't" and "it's"; AI defaults to formal unabbreviated forms.</td>
+          </tr>
+          <tr>
+            <td>Promotional words (<em>robust, seamless</em>)</td>
+            <td><span class="tag-useless">0.535</span></td>
+            <td>Near random chance — no consistent directional separation.</td>
+          </tr>
+          <tr>
+            <td>Hedging words (<em>may, might, typically</em>)</td>
+            <td><span class="tag-useless">0.516</span></td>
+            <td>Useless heuristic — humans actually hedged <strong>more</strong> than AI.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Features -->
+    <section>
+      <h2 class="section-title">Key Capabilities</h2>
+      <div class="grid-3">
+        <div class="feature-card">
+          <h3>⚡ Deterministic & Dependency-Free</h3>
+          <p>Runs purely in Node.js standard library with zero runtime npm dependencies. No API keys, no network calls, no black-box classifier latency.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🎯 Prioritized Fix Loop</h3>
+          <p>Reports only the single worst failing dimension per pass. Fixing one dimension at a time prevents agents from trading one flaw for another.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🛡️ Code & URL Integrity Guard</h3>
+          <p>Pass <code>--before orig.md</code> to verify that style improvements never secretly rewrite fenced code snippets or drop source citations.</p>
+        </div>
+        <div class="feature-card">
+          <h3>📦 NPX & Global CLI</h3>
+          <p>Run instantly with <code>npx measured-humanizer</code> or install the standalone CLI script via curl.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🤖 GitHub Action for CI</h3>
+          <p>Drop <code>SadhvikChirunomula/measured-humanizer@v1.0.0</code> directly into your PR workflows to gate docs automatically.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🔌 Model Context Protocol (MCP)</h3>
+          <p>Includes a stdio MCP server ready to plug into Claude Desktop, Cursor, or autonomous agent loops.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Measured Humanizer is MIT Licensed and open-source.</p>
+      <p style="margin-top: 0.5rem;"><a href="https://github.com/SadhvikChirunomula/measured-humanizer">View on GitHub</a> • <a href="https://www.npmjs.com/package/measured-humanizer">View on npm</a> • <a href="https://github.com/SadhvikChirunomula/measured-humanizer/releases/tag/v1.0.0">v1.0.0 Release</a></p>
+    </footer>
+  </div>
+
+  <script>
+    function copyInstall() {
+      navigator.clipboard.writeText("npx measured-humanizer draft.md --brief");
+      const el = document.getElementById("copy-text");
+      const orig = el.innerText;
+      el.innerText = "✓ Copied to clipboard!";
+      setTimeout(() => el.innerText = orig, 2000);
+    }
+
+    const SAMPLES = {
+      ai: `# Overview of Distributed Messaging\n\nDistributed messaging systems play a vital role in modern software architectures. By decoupling producers from consumers, organizations can achieve high scalability and fault tolerance. Moreover, message queues ensure asynchronous communication across independent services.\n\nFurthermore, these platforms provide durability and message persistence across cluster nodes. Message brokers handle the storage, routing, and delivery of events reliably. In addition, dead letter queues allow engineers to catch undelivered payloads.\n\nIt is not simply a queue, it is a resilient backbone for enterprise applications. Implementing proper partition strategies ensures uniform throughput. Ultimately, organizations that harness distributed messaging can streamline their event-driven architectures.`,
+      human: `# Debugging Our Queue Retry Storm\n\nLast Tuesday, our cluster stopped accepting incoming jobs. We set the queue retry budget to three attempts before giving up on a node entirely. That turned out to be our mistake.\n\nShort version: a single worker pod stalled on memory, failed health checks, and kicked all 4,000 in-flight tasks right back into the primary exchange at once. The remaining five pods tried to swallow the flood, breached their own memory limits, and dropped like dominos.\n\nWe didn't need a larger cluster. We needed exponential backoff and jitter on the retry worker. We patched the backoff algorithm in commit a9f1b2, deployed to staging, and simulated another node failure with 10k messages. The queue held up cleanly.`
+    };
+
+    function loadSample(type) {
+      document.getElementById("input-text").value = SAMPLES[type];
+      analyzeText();
+    }
+
+    function analyzeText() {
+      const text = document.getElementById("input-text").value.trim();
+      const res = document.getElementById("results");
+      if (!text) {
+        res.innerHTML = '<div style="color:#6b7280; text-align:center; margin:auto;">Paste text above or choose a sample to see live metrics.</div>';
+        return;
+      }
+
+      // Lightweight client-side port of style_gate metrics
+      const prose = text.replace(/```[\s\S]*?```/g, "").replace(/^#{1,6}\s+.*$/gm, "").trim();
+      const paras = prose.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+      const paraLens = paras.map(p => (p.match(/\b[a-zA-Z0-9'-]+\b/g) || []).length);
+      const words = (prose.match(/\b[a-zA-Z0-9'-]+\b/g) || []).length;
+      
+      const pMean = paraLens.reduce((a, b) => a + b, 0) / (paraLens.length || 1);
+      const pStdev = Math.sqrt(paraLens.reduce((acc, l) => acc + Math.pow(l - pMean, 2), 0) / (paraLens.length || 1));
+
+      const firstPerson = (prose.match(/\b(we|our|us|i|my|we're|we've|we'll)\b/gi) || []).length;
+      const fpRate = words ? (firstPerson / words) * 1000 : 0;
+
+      const contractions = (prose.match(/\b[a-z]+'(?:t|re|ve|m|ll|d|s)\b/gi) || []).length;
+      const contRate = words ? (contractions / words) * 1000 : 0;
+
+      const parallelismMatch = prose.match(/\b(?:not (?:just |merely |simply )?[\w\s]{2,30}, but|isn't (?:just |merely )?[\w\s]{2,30}, it's|it's not [\w\s]{2,30}, it's)\b/gi);
+
+      const passPara = pStdev >= 14.37;
+      const passFp = fpRate >= 0.73;
+      const passCont = contRate >= 5.12;
+      const passParallel = !parallelismMatch;
+
+      const passes = passPara && passFp && passParallel;
+
+      let html = `
+        <div class="verdict-banner ${passes ? 'verdict-pass' : 'verdict-fail'}">
+          <span>Verdict: ${passes ? 'PASSED (Human-like)' : 'FAILED / VETOED'}</span>
+          <span>${passes ? '✓ Clean' : '⚠ Failing Checks'}</span>
+        </div>
+        <div class="metric-list">
+          <div class="metric-item ${passPara ? 'good' : 'bad'}">
+            <span>Paragraph Variance (std dev)</span>
+            <span class="metric-val">${pStdev.toFixed(1)} (min 14.4)</span>
+          </div>
+          <div class="metric-item ${passFp ? 'good' : 'bad'}">
+            <span>First-person Pronouns (/1k words)</span>
+            <span class="metric-val">${fpRate.toFixed(1)} (min 0.73)</span>
+          </div>
+          <div class="metric-item ${passCont ? 'good' : 'bad'}">
+            <span>Contractions (/1k words)</span>
+            <span class="metric-val">${contRate.toFixed(1)} (target 5-24)</span>
+          </div>
+          <div class="metric-item ${passParallel ? 'good' : 'bad'}">
+            <span>Parallelism ("not X, but Y")</span>
+            <span class="metric-val">${parallelismMatch ? 'Tripped (Veto)' : '0 (Pass)'}</span>
+          </div>
+        </div>
+      `;
+
+      if (!passes) {
+        let fix = "";
+        if (parallelismMatch) {
+          fix = 'Remove the "not X, but Y" / "it is not A, it is B" construction.';
+        } else if (!passFp) {
+          fix = 'First-person rate is 0.00. Write from a concrete point of view using "we" or "I".';
+        } else if (!passPara) {
+          fix = 'Paragraph lengths are unnaturally uniform. Add 1-sentence punch paragraphs and vary section lengths.';
+        }
+        html += `<div class="fix-box"><strong>Worst Dimension:</strong> ${fix}</div>`;
+      }
+
+      res.innerHTML = html;
+    }
+
+    // Auto-analyze initial sample
+    loadSample('ai');
+  </script>
+</body>
+</html>

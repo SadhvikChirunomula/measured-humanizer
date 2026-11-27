@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/SadhvikChirunomula/measured-humanizer/actions/workflows/ci.yml/badge.svg)](https://github.com/SadhvikChirunomula/measured-humanizer/actions/workflows/ci.yml)
 [![Human-Grade Score](badges/human-grade.svg)](https://sadhvikchirunomula.github.io/measured-humanizer/)
+[![Chrome Extension](https://img.shields.io/badge/Chrome%20Extension-Ready-success?logo=googlechrome)](extensions/chrome)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/measured-humanizer.svg)](https://www.npmjs.com/package/measured-humanizer)
 [![GitHub Action](https://img.shields.io/badge/GitHub%20Action-Ready-blue.svg)](https://github.com/SadhvikChirunomula/measured-humanizer)
@@ -71,6 +72,8 @@ something real, not as a bypass guarantee. See [Limitations](#limitations).
 
 While originally packaged as a Claude Code skill, Measured Humanizer acts as a standalone CLI tool that can be seamlessly integrated into any AI development workflow:
 
+- **Chrome Extension (QuillBot Alternative)**: Real-time floating sniff-test badge & one-click surgical repair across Gmail, Google Docs, Notion, LinkedIn, Reddit, and every text box on the web ([`extensions/chrome/`](extensions/chrome)).
+- **VS Code & Cursor**: Real-time inline style linting (ESLint for prose) with `Cmd+.` quick-fix actions ([`extensions/vscode/`](extensions/vscode)).
 - **GitHub Copilot / Codex**: Can be invoked within Copilot Workspace, terminal chats, or as a pre-commit hook to govern generated documentation.
 - **Claude Code**: Installs directly as a native skill.
 - **Antigravity & AutoGPT**: Agents can run the scorer natively in an automated correction loop.

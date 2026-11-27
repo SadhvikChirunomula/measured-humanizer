@@ -166,8 +166,38 @@ orchestrator.run(SAMPLE_DOC).then((res) => {
     process.exit(1);
   }
 
+  // ----------------------------------------------------
+  // Test H: Chrome Extension Manifest & Evaluator Engine
+  // ----------------------------------------------------
+  console.log("\n[Test H] Chrome Extension Manifest & Client Evaluator Engine");
+  const chromeManifest = require("../extensions/chrome/manifest.json");
+  const { evaluateText, PROFILES: chromeProfiles } = require("../extensions/chrome/lib/evaluator.js");
+  
+  if (chromeManifest.manifest_version === 3 && chromeManifest.permissions.includes("storage")) {
+    console.log("  ✓ PASS: Chrome Extension Manifest V3 valid with required permissions.");
+  } else {
+    console.error("  ✗ FAIL: Chrome manifest invalid:", chromeManifest);
+    process.exit(1);
+  }
+
+  const aiEval = evaluateText("Distributed systems play a vital role. It is not simply a queue, but a resilient backbone.", "engineering");
+  if (!aiEval.pass && aiEval.worst && aiEval.worst.dimension === "parallelism") {
+    console.log("  ✓ PASS: Chrome Evaluator correctly flagged artificial AI parallelism in raw browser text.");
+  } else {
+    console.error("  ✗ FAIL: Chrome Evaluator failed AI detection test:", aiEval);
+    process.exit(1);
+  }
+
+  const humanEval = evaluateText("Last Tuesday, our cluster stopped accepting incoming jobs. We set the queue retry budget to three attempts.", "engineering");
+  if (humanEval.metrics.words > 10) {
+    console.log("  ✓ PASS: Chrome Evaluator cleanly parsed human sample prose.");
+  } else {
+    console.error("  ✗ FAIL: Chrome Evaluator failed human test:", humanEval);
+    process.exit(1);
+  }
+
   console.log("\n=======================================================");
-  console.log("🚀 ALL 7 EXTENSION SUITES PASSED (A, B, C, D, E, F, G)!");
+  console.log("🚀 ALL 8 EXTENSION SUITES PASSED (A, B, C, D, E, F, G, H)!");
   console.log("=======================================================");
   process.exit(0);
 });

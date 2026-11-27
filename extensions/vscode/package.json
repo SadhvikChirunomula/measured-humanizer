@@ -1,0 +1,78 @@
+{
+  "name": "measured-humanizer-vscode",
+  "displayName": "Measured Humanizer (ESLint for Prose)",
+  "description": "Deterministic style gate & surgical repair for AI writing. Underlines robotic prose and repairs defects with AST code armor.",
+  "version": "1.0.0",
+  "publisher": "sadhvik",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SadhvikChirunomula/measured-humanizer"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "markdown",
+    "ai writing",
+    "humanizer",
+    "style gate",
+    "linter"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "measuredHumanizer.evaluateDocument",
+        "title": "Measured Humanizer: Lint Active Document"
+      },
+      {
+        "command": "measuredHumanizer.humanizeParagraph",
+        "title": "Measured Humanizer: Surgically Humanize Paragraph"
+      },
+      {
+        "command": "measuredHumanizer.setProfile",
+        "title": "Measured Humanizer: Switch Adaptive Profile"
+      }
+    ],
+    "configuration": {
+      "title": "Measured Humanizer",
+      "properties": {
+        "measuredHumanizer.profile": {
+          "type": "string",
+          "default": "engineering",
+          "enum": [
+            "engineering",
+            "executive",
+            "marketing",
+            "academic"
+          ],
+          "description": "Adaptive domain profile for threshold calibration"
+        },
+        "measuredHumanizer.liveDiagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable real-time inline diagnostic squiggles for robotic patterns"
+        },
+        "measuredHumanizer.provider": {
+          "type": "string",
+          "default": "ollama",
+          "enum": [
+            "ollama",
+            "anthropic",
+            "openai",
+            "mock"
+          ],
+          "description": "LLM provider for autonomous surgical patching"
+        }
+      }
+    }
+  }
+}

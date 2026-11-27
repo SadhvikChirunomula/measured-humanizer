@@ -27,9 +27,10 @@ jobs:
       - name: Run test suite
         run: npm test
 
-      - name: Test npx / bin CLI execution
+      - name: Test npx / bin CLI execution & Step Summary
         run: |
           node bin/measured-humanizer.js tests/fixtures/human_shaped.md --brief
+          node bin/measured-humanizer.js tests/fixtures/human_shaped.md --summary
           node bin/measured-humanizer.js tests/fixtures/ai_shaped.md --brief || true
 
       - name: Test MCP Server protocol

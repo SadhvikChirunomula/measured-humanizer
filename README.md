@@ -1,6 +1,7 @@
 # Measured Humanizer
 
 [![CI](https://github.com/SadhvikChirunomula/measured-humanizer/actions/workflows/ci.yml/badge.svg)](https://github.com/SadhvikChirunomula/measured-humanizer/actions/workflows/ci.yml)
+[![Human-Grade Score](badges/human-grade.svg)](https://sadhvikchirunomula.github.io/measured-humanizer/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/measured-humanizer.svg)](https://www.npmjs.com/package/measured-humanizer)
 [![GitHub Action](https://img.shields.io/badge/GitHub%20Action-Ready-blue.svg)](https://github.com/SadhvikChirunomula/measured-humanizer)

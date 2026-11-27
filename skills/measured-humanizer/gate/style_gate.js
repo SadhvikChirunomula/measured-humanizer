@@ -330,6 +330,24 @@ function runCli(args = process.argv.slice(2)) {
   } else {
     console.log(JSON.stringify(out, null, 1));
   }
+
+  // GitHub Actions Step Summary & Scorecard export
+  if (args.includes("--summary") || process.env.GITHUB_STEP_SUMMARY) {
+    try {
+      const summaryPath = path.join(__dirname, "..", "..", "..", "lib", "summary.js");
+      if (fs.existsSync(summaryPath)) {
+        const { generateStepSummary } = require(summaryPath);
+        const summaryMd = generateStepSummary(out, file);
+        if (process.env.GITHUB_STEP_SUMMARY) {
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summaryMd + "\n", "utf8");
+        }
+        if (args.includes("--summary")) {
+          console.log("\n" + summaryMd);
+        }
+      }
+    } catch (_) {}
+  }
+
   if (args.includes("--exit-code") && !out.pass) {
     process.exit(1);
   }

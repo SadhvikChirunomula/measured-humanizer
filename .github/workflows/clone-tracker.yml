@@ -4,17 +4,11 @@ on:
   schedule:
     # Runs automatically every day at midnight UTC
     - cron: '0 0 * * *'
-  # Allows you to trigger the workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   run-stats:
     runs-on: ubuntu-latest
-    if: env.HAS_TOKEN == 'true'
-    env:
-      HAS_TOKEN: ${{ secrets.STATS_TOKEN != '' }}
-    
-    # Required permissions to write the generated reports to your repository
     permissions:
       contents: write
 
@@ -22,7 +16,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check token
+        id: check-token
+        run: |
+          if [ -z "${{ secrets.STATS_TOKEN }}" ]; then
+            echo "STATS_TOKEN secret is not configured. Skipping traffic stats fetch."
+            echo "has_token=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_token=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Fetch and aggregate repository stats
+        if: steps.check-token.outputs.has_token == 'true'
         uses: jgehrcke/github-repo-stats@v1.4.2
         with:
           # A Personal Access Token (PAT) with 'repo' scope is required 

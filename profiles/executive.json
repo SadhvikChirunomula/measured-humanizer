@@ -1,0 +1,20 @@
+{
+  "generated": "2026-11-27",
+  "name": "executive",
+  "description": "Executive briefs, leadership memos, board updates, strategic proposals. Emphasizes conciseness and concrete business metrics with low filler tolerance.",
+  "corpus": {
+    "samples": "5000+",
+    "domain": "executive strategy memos, shareholder updates, leadership briefs"
+  },
+  "minAuc": 0.65,
+  "cutoff": 0.82,
+  "metrics": {
+    "sent_stdev": { "lo": 5.00, "hi": 45.00, "strength": 0.70 },
+    "para_stdev": { "lo": 12.00, "hi": 70.00, "strength": 0.85 },
+    "contraction_rate": { "lo": 2.00, "hi": 18.00, "strength": 0.60 },
+    "first_person_rate": { "lo": 1.50, "hi": 30.00, "strength": 0.85 },
+    "emdash_rate": { "lo": 0, "hi": 3.50, "strength": 0.70 },
+    "concrete_rate": { "lo": 15.00, "hi": 120.00, "strength": 0.78 },
+    "long_word_rate": { "lo": 50.00, "hi": 180.00, "strength": 0.68 }
+  }
+}

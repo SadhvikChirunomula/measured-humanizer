@@ -1,0 +1,20 @@
+{
+  "generated": "2026-11-27",
+  "name": "academic",
+  "description": "Scientific papers, deep research preprints, technical RFCs. Lower first-person rate expectations with dense technical vocabulary and rigorous structural bounds.",
+  "corpus": {
+    "samples": "5000+",
+    "domain": "computer science preprints, systems RFCs, technical research papers"
+  },
+  "minAuc": 0.65,
+  "cutoff": 0.82,
+  "metrics": {
+    "sent_stdev": { "lo": 6.00, "hi": 65.00, "strength": 0.70 },
+    "para_stdev": { "lo": 12.00, "hi": 75.00, "strength": 0.85 },
+    "contraction_rate": { "lo": 0, "hi": 12.00, "strength": 0.55 },
+    "first_person_rate": { "lo": 0.30, "hi": 18.00, "strength": 0.75 },
+    "emdash_rate": { "lo": 0, "hi": 3.00, "strength": 0.68 },
+    "concrete_rate": { "lo": 14.00, "hi": 110.00, "strength": 0.72 },
+    "long_word_rate": { "lo": 75.00, "hi": 240.00, "strength": 0.78 }
+  }
+}

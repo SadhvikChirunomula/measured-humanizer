@@ -81,6 +81,7 @@ const mockClient = new LLMClient({
 const orchestrator = new AutonomousOrchestrator({
   llmClient: mockClient,
   maxIterations: 3,
+  usePatchMode: false,
   logger: () => {}, // silent in test
 });
 

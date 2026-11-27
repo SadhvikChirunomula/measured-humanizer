@@ -1,0 +1,20 @@
+{
+  "generated": "2026-11-27",
+  "name": "marketing",
+  "description": "Product announcements, developer relations, landing page copy, release summaries. Permits higher contraction rates and punchier paragraph structures.",
+  "corpus": {
+    "samples": "5000+",
+    "domain": "product launches, developer marketing, changelogs, tech outreach"
+  },
+  "minAuc": 0.65,
+  "cutoff": 0.80,
+  "metrics": {
+    "sent_stdev": { "lo": 7.00, "hi": 80.00, "strength": 0.75 },
+    "para_stdev": { "lo": 16.00, "hi": 95.00, "strength": 0.92 },
+    "contraction_rate": { "lo": 6.00, "hi": 32.00, "strength": 0.70 },
+    "first_person_rate": { "lo": 2.00, "hi": 35.00, "strength": 0.88 },
+    "emdash_rate": { "lo": 0, "hi": 5.00, "strength": 0.72 },
+    "concrete_rate": { "lo": 8.00, "hi": 90.00, "strength": 0.65 },
+    "long_word_rate": { "lo": 45.00, "hi": 170.00, "strength": 0.70 }
+  }
+}

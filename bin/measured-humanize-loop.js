@@ -16,20 +16,25 @@ async function main() {
   const outIdx = args.indexOf("--out");
   const maxIdx = args.indexOf("--max");
   const provIdx = args.indexOf("--provider");
+  const profIdx = args.indexOf("--profile");
+  const noPatch = args.includes("--no-patch");
 
   if (!file) {
-    console.error("Usage: node bin/measured-humanize-loop.js <draft.md> [--out output.md] [--max 6] [--provider anthropic|openai|ollama]");
+    console.error("Usage: node bin/measured-humanize-loop.js <draft.md> [--out output.md] [--profile engineering|executive|marketing|academic] [--max 6] [--provider anthropic|openai|ollama] [--no-patch]");
     process.exit(2);
   }
 
   const inputMd = fs.readFileSync(file, "utf8");
   const maxIterations = maxIdx >= 0 ? parseInt(args[maxIdx + 1], 10) : 6;
   const provider = provIdx >= 0 ? args[provIdx + 1] : (process.env.LLM_PROVIDER || "anthropic");
+  const profile = profIdx >= 0 ? args[profIdx + 1] : "engineering";
 
   const llmClient = new LLMClient({ provider });
   const orchestrator = new AutonomousOrchestrator({
     llmClient,
     maxIterations,
+    profile,
+    usePatchMode: !noPatch,
   });
 
   try {

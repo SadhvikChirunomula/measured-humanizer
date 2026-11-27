@@ -16,7 +16,7 @@
     "README.md"
   ],
   "scripts": {
-    "test": "bash ./test/run.sh && node test/test_autonomous_loop.js"
+    "test": "bash ./test/run.sh && node test/test_autonomous_loop.js && node test/test_brutal_adversarial.js"
   },
   "repository": {
     "type": "git",

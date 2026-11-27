@@ -17,7 +17,12 @@
     "README.md"
   ],
   "scripts": {
-    "test": "bash ./test/run.sh && node test/test_autonomous_loop.js && node test/test_brutal_adversarial.js && node test/test_extensions.js"
+    "test": "npm run test:all",
+    "test:all": "bash ./tests/run.sh && node tests/test_autonomous_loop.js && node tests/test_brutal_adversarial.js && node tests/test_extensions.js",
+    "test:gate": "bash ./tests/run.sh",
+    "test:loop": "node tests/test_autonomous_loop.js",
+    "test:adversarial": "node tests/test_brutal_adversarial.js",
+    "test:extensions": "node tests/test_extensions.js"
   },
   "repository": {
     "type": "git",

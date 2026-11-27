@@ -13,7 +13,7 @@ Fixes #(issue)
 
 ## Checklist
 - [ ] My code adheres to the project's coding standards.
-- [ ] I have verified that all existing and new tests pass locally (`bash ./test/run.sh`).
+- [ ] I have verified that all existing and new tests pass locally (`npm test`).
 - [ ] No external runtime dependencies were introduced to the core gate (`skills/measured-humanizer/gate/style_gate.js`).
 - [ ] Any updates to thresholds, weights, or dimensions are backed by empirical measurement or documentation.
 - [ ] I have updated relevant documentation where necessary.

@@ -29,8 +29,8 @@ jobs:
 
       - name: Test npx / bin CLI execution
         run: |
-          node bin/measured-humanizer.js test/fixtures/human_shaped.md --brief
-          node bin/measured-humanizer.js test/fixtures/ai_shaped.md --brief || true
+          node bin/measured-humanizer.js tests/fixtures/human_shaped.md --brief
+          node bin/measured-humanizer.js tests/fixtures/ai_shaped.md --brief || true
 
       - name: Test MCP Server protocol
         run: |

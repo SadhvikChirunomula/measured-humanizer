@@ -242,12 +242,36 @@ The shipped thresholds are fitted to technical practitioner prose. Marketing cop
 
 `gate/thresholds.json` holds the ranges, the AUC-derived weight per dimension, and the swept cutoff. To refit: gather ~30+ documents per class in your domain, run `metrics()` from `gate/style_gate.js` over both sets, keep dimensions with AUC ≥ 0.65, set each range to the human percentile band, and sweep the cutoff for best separation.
 
-## Development & Testing
+## Testing & Test Suites
+
+The repository includes a comprehensive, multi-layered verification suite located in the [`tests/`](tests/) directory:
 
 ```bash
-bash ./test/run.sh
+# Run the entire test suite across all suites
+npm test
 ```
-Two fixtures carry the load: a document written to look generated must fail and get vetoed, and one written the way the corpus measures must pass.
+
+You can also run specific test suites individually:
+
+```bash
+# 1. Core Style Gate & Regression Contract (18 assertions)
+npm run test:gate          # or bash ./tests/run.sh
+
+# 2. Closed-Loop Multi-Agent Convergence Simulation
+npm run test:loop          # or node tests/test_autonomous_loop.js
+
+# 3. Brutal Adversarial Stress Testing (16 attack vectors)
+npm run test:adversarial   # or node tests/test_brutal_adversarial.js
+
+# 4. Domain Profiles & Local Patch Clamping Engine
+npm run test:extensions    # or node tests/test_extensions.js
+```
+
+### What the Test Suites Cover:
+1. **Core Gating (`tests/run.sh`)**: Validates that human-shaped fixtures pass, AI-shaped fixtures are vetoed, thresholds load properly, and non-zoning flags work.
+2. **AST Hardware-Style Interlock (`tests/test_autonomous_loop.js`)**: Proves cryptographic SHA-256 invariance on fenced code blocks, language tags, and URLs when edits occur.
+3. **Adversarial Security (`tests/test_brutal_adversarial.js`)**: Tests 16 attack vectors including stealth code alterations, URL protocol downgrades (`https` $\to$ `http`), query parameter stripping, unclosed fences, zero-prose payloads, and control-loop ping-pong traps.
+4. **Adaptive Profiles & Splicing (`tests/test_extensions.js`)**: Verifies built-in profile resolution (`engineering`, `executive`, `marketing`, `academic`) and ensures local patch clamping modifies *only* the defective paragraph without touching surrounding code.
 
 ## Contributing
 

@@ -20,14 +20,16 @@ Measured Humanizer is built on empirical, structural measurement rather than sub
 2. Verify that Node.js (version 14 or higher) and bash are available on your system.
 3. Run the automated test suite to ensure everything passes:
    ```bash
-   bash ./test/run.sh
+   npm test
    ```
 
 ### Project Structure
-- `skills/measured-humanizer/gate/style_gate.js`: The core scoring engine and CLI entry point.
-- `skills/measured-humanizer/gate/thresholds.json`: Calibrated thresholds, weights, and ranges.
+- `lib/`: Autonomous multi-agent orchestrator, AST integrity interlock, profiles, and local patch engines.
+- `profiles/`: Calibrated domain configurations (`engineering`, `executive`, `marketing`, `academic`).
+- `skills/measured-humanizer/gate/style_gate.js`: Core scoring engine and CLI entry point.
+- `skills/measured-humanizer/gate/thresholds.json`: Default baseline calibrated thresholds.
 - `skills/measured-humanizer/reference/`: Derivation notes and calibration methodology.
-- `test/`: Verification suite and test fixtures.
+- `tests/`: Comprehensive verification suites, fixtures, and adversarial stress tests.
 
 ## How to Contribute
 
@@ -47,10 +49,10 @@ If you want to propose or adjust metrics:
    git checkout -b feature/my-enhancement
    ```
 2. Make your edits cleanly and adhere to existing coding conventions.
-3. Add or update tests under `test/` where applicable.
+3. Add or update tests under `tests/` where applicable.
 4. Run the test suite:
    ```bash
-   bash ./test/run.sh
+   npm test
    ```
 5. Commit your changes with clear, descriptive commit messages.
 6. Push your branch to your fork and submit a Pull Request targeting `main`.
